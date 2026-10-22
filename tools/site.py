@@ -26,6 +26,19 @@ def wa(msg: str) -> str:
 
 
 # ---------------------------------------------------------------- planos (espelha rt_plans.yml)
+PHASES = {
+    "nova": '<circle cx="16" cy="16" r="13" fill="none" stroke="var(--moon)" stroke-width="2"/>',
+    "crescente": '<circle cx="16" cy="16" r="14" fill="var(--moon)"/><circle cx="24" cy="12" r="12" fill="var(--bg)"/>',
+    "quarto": '<path d="M16 2a14 14 0 0 1 0 28z" fill="var(--moon)"/><circle cx="16" cy="16" r="13.5" fill="none" stroke="var(--moon)" stroke-width="1.5"/>',
+    "cheia": '<circle cx="16" cy="16" r="14" fill="var(--moon)"/>',
+    "eclipse": '<circle cx="16" cy="16" r="14" fill="var(--moon)"/><circle cx="19" cy="14" r="10" fill="var(--ink)"/>',
+}
+
+
+def phase_svg(key: str) -> str:
+    return f'<svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">{PHASES[key]}</svg>'
+
+
 PLANOS = [
     dict(k="nova", nome="Nova", preco="197", fase="🌑", p="Para começar a atender com IA num canal.",
          itens=["1 canal conectado", "1 agente com skills", "Filas e Kanban", "Espaço de trabalho mínimo", "Suporte com pessoas"]),
@@ -65,8 +78,8 @@ a{color:var(--link)}img{max-width:100%}
 header.top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
 header.top .w{display:flex;align-items:center;gap:22px;height:64px}
 header.top img{height:30px;display:block}
-.logo-d{display:none}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .logo-l{display:none}:root:not([data-theme=light]) .logo-d{display:block}}
+.top img.logo-d{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .top img.logo-l{display:none}:root:not([data-theme=light]) .top img.logo-d{display:block}}
 nav.m{display:flex;gap:6px 22px;margin-left:auto;font-size:15px;flex-wrap:wrap}
 nav.m a{color:var(--muted);text-decoration:none}nav.m a:hover,nav.m a[aria-current]{color:var(--text)}
 .btn{display:inline-block;padding:11px 22px;border-radius:999px;font-weight:600;text-decoration:none;font-size:16px;border:1.5px solid var(--brand);color:var(--text)}
@@ -92,7 +105,7 @@ section.b.alt{background:var(--bg2)}
 .plans{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
 .plan{border:1px solid var(--line);border-radius:18px;padding:22px 18px;display:flex;flex-direction:column;background:var(--bg)}
 .plan.d{border:2px solid var(--moon)}
-.plan .f{font-size:30px}.plan .pr{font-size:34px;font-weight:700;letter-spacing:-.02em;margin:6px 0 2px}.plan .pr small{font-size:14px;font-weight:400;color:var(--muted)}
+.plan .f{height:32px}.plan .pr{font-size:34px;font-weight:700;letter-spacing:-.02em;margin:6px 0 2px}.plan .pr small{font-size:14px;font-weight:400;color:var(--muted)}
 .plan ul{padding-left:18px;margin:12px 0 18px;color:var(--muted);font-size:15px;flex:1}.plan li{margin:5px 0}
 .ex{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .ex .c{border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;gap:14px;align-items:center;background:var(--bg)}
@@ -133,7 +146,7 @@ def planos_html() -> str:
     cards = ""
     for p in PLANOS:
         li = "".join(f"<li>{html.escape(i)}</li>" for i in p["itens"])
-        cards += (f'<div class="plan{" d" if p.get("destaque") else ""}"><div class="f" aria-hidden="true">{p["fase"]}</div><h3>{p["nome"]}</h3>'
+        cards += (f'<div class="plan{" d" if p.get("destaque") else ""}"><div class="f" aria-hidden="true">{phase_svg(p["k"])}</div><h3>{p["nome"]}</h3>'
                   f'<div class="pr">R$ {p["preco"]}<small>/mês</small></div><p style="margin:0;color:var(--muted);font-size:15px">{p["p"]}</p><ul>{li}</ul>'
                   f'<a class="btn s p" href="{wa("Olá! Quero saber mais sobre o plano " + p["nome"] + " da LUAR.")}">Falar no WhatsApp</a></div>')
     return f'<div class="plans">{cards}</div><p class="ill">Valores de lançamento, a partir de, sujeitos a confirmação. Implantação cobrada à parte. Limites de uso conforme o plano.</p>'
