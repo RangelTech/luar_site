@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://luar.rangeltech.net/sitemap.xml
