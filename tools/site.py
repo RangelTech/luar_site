@@ -231,10 +231,10 @@ def contato() -> None:
 
 def notfound() -> None:
     body = '<div class="w" style="padding:96px 20px;text-align:center"><h1>Página não encontrada</h1><p class="lead" style="margin:0 auto 24px">Essa página não existe.</p><a class="btn p" href="/">Voltar ao início</a></div>'
-    page("/404.html", "Página não encontrada · LUAR", "Página não encontrada.", body)
-    (PUBLIC / "404.html" / "index.html").replace(PUBLIC / "404.html.tmp")
-    (PUBLIC / "404.html").rmdir()
-    (PUBLIC / "404.html.tmp").replace(PUBLIC / "404.html")
+    page("/404", "Página não encontrada · LUAR", "Página não encontrada.", body)
+    (PUBLIC / "404.html").write_text((PUBLIC / "404" / "index.html").read_text(encoding="utf-8"), encoding="utf-8")
+    (PUBLIC / "404" / "index.html").unlink()
+    (PUBLIC / "404").rmdir()
 
 
 if __name__ == "__main__":
